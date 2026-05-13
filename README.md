@@ -28,7 +28,7 @@ L'objectiu era recrear amb la màxima precisió possible tant **l'estructura sem
 
 ## 🖼️ Captura de pantalla
 
-![Captura de pantalla del projecte](/workspaces/viquipedia-python-2.0/image.png)
+![Captura de pantalla del projecte](https://github.com/mayorcadavid815-tech/viquipedia-python-2.0/blob/main/image.png)
 
 ---
 
