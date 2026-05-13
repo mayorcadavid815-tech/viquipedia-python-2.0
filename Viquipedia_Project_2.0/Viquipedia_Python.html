@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Python - Viquipèdia</title>
+
+<style>
+/* RESET */
+/*Elimina márgenes y rellenos por defecto del navegador
+   y asegura que el tamaño incluya bordes y padding*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* BASE */
+body {
+  font-family: sans-serif;   /* Fuente por defecto */
+  font-size: 16px;           /* Tamaño base del texto */
+  background: #fff;         /* Fondo blanco */
+  color: #202122;           /* Color principal del texto */
+}
+/* CONTENEDORES */
+.container {
+  max-width: 1200px;        /* Ancho máximo del contenido */
+  margin: auto;             /* Centra horizontalmente */
+  padding: 0 16px;          /* Espacio lateral interno */
+}
+
+.content {
+  max-width: 900px;         /* Ancho máximo del contenido interno */
+  margin: 24px auto;        /* Margen vertical y centrado horizontal */
+  padding: 0 16px;          /* Espacio interno lateral */
+}
+
+/* HEADER */
+header {
+  border-bottom: 1px solid #a2a9b1; /* Línea inferior */
+  background: #fff;                /* Fondo blanco */
+}
+
+.header-bar {
+  display: flex;                   /* Layout flexible */
+  align-items: center;             /* Alinea verticalmente */
+  justify-content: space-between;  /* Separa izquierda y derecha */
+  height: 56px;                    /* Altura fija del header */
+}
+
+/* IZQUIERDA */
+.header-left {
+  display: flex;           /* Elementos en fila */
+  align-items: center;     /* Alineación vertical */
+  gap: 12px;               /* Espacio entre elementos */
+}
+
+.menu-toggle {
+  font-size: 22px;         /* Tamaño del icono del menú */
+  cursor: pointer;        /* Cursor tipo botón */
+}
+
+.logo img {
+  height: 32px;            /* Altura del logo */
+}
+
+/* BUSCADOR */
+.search {
+  flex: 1;                 /* Ocupa el espacio disponible */
+  display: flex;          /* Input y botón en fila */
+  max-width: 500px;       /* Ancho máximo */
+  margin: 0 24px;         /* Espacio lateral */
+}
+
+.search input {
+  flex: 1;                          /* Ocupa casi todo el ancho */
+  padding: 6px 8px;                /* Espaciado interno */
+  border: 1px solid #a2a9b1;       /* Borde */
+  border-right: none;              /* Quita el borde derecho (se une al botón) */
+}
+
+.search button {
+  border: 1px solid #a2a9b1;       /* Borde del botón */
+  background: #f8f9fa;             /* Fondo gris claro */
+  padding: 0 12px;                 /* Espacio interno horizontal */
+  cursor: pointer;                /* Cursor clickeable */
+}
+
+/* DERECHA */
+.header-right {
+  display: flex;           /* Elementos alineados en fila */
+  align-items: center;     /* Alineación vertical */
+  gap: 16px;               /* Separación entre enlaces */
+  font-size: 14px;         /* Tamaño del texto */
+}
+
+.header-right a {
+  text-decoration: none;   /* Quita subrayado */
+  color: #0645ad;          /* Color azul tipo enlace */
+}
+
+/* MENÚ LATERAL HEADER */
+.menu {
+  position: relative;     /* Referencia para posicionar el menú interno */
+}
+
+.side-menu {
+  display: none;          /* Oculto por defecto */
+  position: absolute;     /* Posicionado relativo al contenedor .menu */
+  top: 36px;              /* Separación desde arriba */
+  left: 0;                /* Alineado a la izquierda */
+  width: 220px;           /* Ancho del menú */
+  background: #fff;       /* Fondo blanco */
+  border: 1px solid #a2a9b1; /* Borde */
+  padding: 12px;          /* Espacio interno */
+  font-size: 14px;        /* Tamaño del texto */
+  z-index: 10;            /* Se superpone al resto */
+}
+
+/* Muestra el menú cuando el checkbox está activado */
+#menu-toggle:checked + label + .side-menu {
+  display: block;
+}
+
+/* ESTILOS INTERNOS DEL MENÚ */
+.side-menu h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.side-menu ul {
+  list-style: none;       /* Quita viñetas */
+  margin-bottom: 12px;
+}
+
+.side-menu li {
+  margin: 6px 0;          /* Espacio entre ítems */
+}
+
+.side-menu a {
+  text-decoration: none;  /* Quita subrayado */
+  color: #0645ad;         /* Azul tipo enlace */
+}
+
+.side-menu hr {
+  border: none;
+  border-top: 1px solid #a2a9b1;
+  margin: 12px 0;
+}
+
+/* TÍTULO + ÍNDICE */
+.title {
+  display: flex;            /* Título e icono alineados en fila */
+  align-items: center;      /* Centrado vertical */
+  gap: 10px;                /* Espacio entre título e icono */
+  font-size: 32px;          /* Tamaño grande del título */
+  margin-bottom: 12px;      /* Separación inferior */
+  position: relative;      /* Referencia para posicionar elementos internos */
+}
+
+.index-wrapper {
+  position: relative;      /* Referencia para posicionar el índice flotante */
+}
+
+.index-toggle {
+  font-size: 22px;         /* Tamaño del icono de índice */
+  cursor: pointer;         /* Cursor clickeable */
+}
+
+/* ÍNDICE FLOTANTE */
+ul ul {
+  margin-left: 20px;       /* Segundo nivel: más a la derecha */
+}
+
+ul ul ul {
+  margin-left: 30px;       /* Tercer nivel aún más desplazado */
+  font-size: 0.9em;        /* Un poco más pequeño para mostrar jerarquía */
+}
+
+ul ul ul ul {
+  margin-left: 40px;       /* Cuarto nivel */
+}
+
+.index-box {
+  position: absolute;      /* Flota respecto a .index-wrapper */
+  top: 100%;               /* Se coloca justo debajo del botón */
+  left: 0;
+  margin-top: 6px;         /* Separación vertical */
+  width: 220px;            /* Ancho fijo */
+  background: white;       /* Fondo blanco */
+  border: 1px solid #a2a9b1;
+  padding: 10px;
+  font-size: 14px;
+  display: none;           /* Oculto por defecto */
+  z-index: 1000;           /* Se superpone a otros elementos */
+}
+
+/* Muestra el índice cuando el checkbox está activado */
+#index-toggle:checked + .index-box {
+  display: block;
+}
+
+/* Estilos internos del índice */
+.index-box ul {
+  list-style: none;        /* Quita viñetas */
+}
+
+.index-box li {
+  margin: 6px 0;           /* Espacio entre ítems */
+}
+
+.index-box a {
+  text-decoration: none;   /* Quita subrayado */
+  color: #0645ad;          /* Azul tipo enlace */
+}
+
+/* INFOBOX */
+.infobox {
+  float: right;            /* Se coloca a la derecha del texto */
+  width: 260px;            /* Ancho fijo */
+  margin: 0 0 16px 16px;   /* Separación con el contenido */
+  border: 1px solid #a2a9b1;
+  background: #f8f9fa;
+  font-size: 14px;
+}
+
+.infobox table {
+  width: 100%;             /* Ocupa todo el ancho de la caja */
+  border-collapse: collapse; /* Une los bordes */
+}
+
+.infobox th {
+  background: #eaecf0;     /* Fondo gris claro */
+  padding: 8px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.infobox td {
+  padding: 6px 8px;
+  border-top: 1px solid #a2a9b1;
+}
+
+/* Zona de imágenes dentro de la infobox */
+.infobox .images {
+  text-align: center;
+}
+
+.infobox img {
+  max-width: 100px;        /* Limita tamaño de imágenes */
+  margin: 4px;
+}
+
+/* FORMATO ESPECIAL PARA TABLAS */
+
+/* Colorea la primera columna a partir de la tercera fila */
+table tr:nth-child(n+3) td:first-child {
+  background-color: rgb(231, 226, 226);
+}
+
+table {
+  border-collapse: collapse; /* Une bordes */
+  width: 100%;               /* Ocupa todo el ancho */
+}
+
+/* Primera fila de la tabla (cabecera visual) */
+tr:first-child {
+  background-color: #0fc55b; /* Verde vibrante */
+  color: rgb(0, 0, 0);       /* Texto negro */
+}
+
+/* Celdas de tabla */
+th, td {
+  vertical-align: top;       /* Alinea contenido arriba */
+  border: 1px solid white;  /* Separadores visibles */
+  padding: 12px 15px;
+  text-align: left;
+  /* background-color: #f2f2f2;  Fondo opcional */
+}
+
+/* LIMPIAR FLOAT */
+/* Evita que el contenedor colapse por la infobox flotante */
+.content::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/* TEXTOS */
+.content p {
+  margin-bottom: 14px;      /* Espacio entre párrafos */
+  line-height: 1.6;        /* Altura de línea cómoda para leer */
+}
+
+.content h2 {
+  border-bottom: 1px solid #a2a9b1; /* Línea bajo subtítulos */
+  margin: 24px 0 12px;
+  clear: both;
+}
+
+/*Para URLs*/
+/* Estado normal del enlace */
+a {
+  text-decoration: none; /* Quita el subrayado */
+  color: #007bff; /* Puedes definir el color que quieras */
+}
+
+/* Estado cuando el ratón está encima */
+a:hover {
+  text-decoration: underline; /* Aparece el subrayado */
+}
+
+/*Cuadro de HISTORIA*/
+.mi-cuadro {
+    width: 300px;             /* Ancho del cuadro */
+    border: 1px solid #ccc;   /* Borde gris fino */
+    padding: 5px;            /* Espacio interno */
+    text-align:left;       /* Centra la imagen y el texto */
+    background-color: #f9f9f9;/* Color de fondo suave */
+    border-radius: 2px;       /* Bordes redondeados */
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1); /* Sombra para dar relieve */
+    margin: 5px auto;        /* Margen y centrado en la página */
+  }
+
+.mi-cuadro img {
+  width: 100%;              /* La foto ocupa todo el ancho del cuadro */
+  height: auto;             /* Mantiene la proporción */
+  border-radius: 1px;       /* Redondea un poco las esquinas de la foto */
+}
+
+.mi-cuadro figcaption {
+  margin-top: 10px;         /* Separa el texto de la foto */
+  font-family: sans-serif;  /* Cambia la fuente */
+  font-size: 0.9em;         /* Texto un poco más pequeño */
+  color: #555;              /* Color gris oscuro para el texto */
+}
+
+/*Para que el codigo aparezca en recuadro*/
+code {
+    background-color: #f1f1f1; /* Gris clarito */
+    color: #000000;            /* Color rojizo/rosado típico de código */
+    padding: 2px 5px;          /* Espacio interno para que no esté pegado */
+    border-radius: 1px;        /* Bordes redondeados */
+    font-family: monospace;    /* Fuente de código */
+    border: 1px solid #ccc;    /* Un borde fino para que parezca un recuadro */
+  }
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="container header-bar">
+
+    <!-- IZQUIERDA -->
+    <div class="header-left">
+      <div class="menu">
+        <input type="checkbox" id="menu-toggle" hidden>
+        <label for="menu-toggle" class="menu-toggle">☰</label>
+
+        <div class="side-menu">
+          <h3>Menú principal</h3>
+          <ul>
+            <li><a href="#">Portada</a></li>
+            <li><a href="#">Article a l'atzar</a></li>
+            <li><a href="#">Articles de qualitat</a></li>
+            <li><a href="#">Pàgines especials</a></li>
+            <li><a href="#">Comunitat</a></li>
+          </ul>
+          <hr>
+          <ul>
+            <li><a href="#">Portal viquipedista</a></li>
+            <li><a href="#">Agenda d'actes</a></li>
+            <li><a href="#">Canvis recents</a></li>
+            <li><a href="#">La taverna</a></li>
+            <li><a href="#">Contacte</a></li>
+            <li><a href="#">Xat</a></li>
+            <li><a href="#">Ajuda</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <a href="#" class="logo">
+        <img src="Captura.PNG" alt="Wikipedia">
+      </a>
+    </div>
+
+    <!-- BUSCADOR -->
+    <form class="search">
+      <input type="search" placeholder="Cerca a Viquipèdia">
+      <button type="button">🔍</button>
+    </form>
+
+    <!-- DERECHA -->
+    <div class="header-right">
+      <a href="#">Donativos</a>
+      <a href="#">Crear una cuenta</a>
+      <a href="#">Iniciar sesión</a>
+    </div>
+
+  </div>
+</header>
+
+
+<!-- CUERPO -->
+<main class="content">
+
+  <!-- TÍTULO -->
+  <h1 class="title">
+    <span class="index-wrapper">
+      <label for="index-toggle" class="index-toggle">☰</label>
+      <input type="checkbox" id="index-toggle" hidden>
+
+      <div class="index-box">
+        <ul>
+          <li><a href="#historia">Història</a></li>
+          <li>
+            <a href="#caracteristiques">Característiques i filosofia</a>
+            <ul>
+              <li><a href="#funcionalitats">Descripció de funcionalitats</a></li>
+              <li><a href="#paradigmes">Paradigmes</a></li>
+            </ul>
+          </li> 
+          <li>
+            <a href="#sintaxi">Sintaxi i semàntica</a>
+            <ul>
+              <li><a href="#sagnat">Sagnat</a></li>
+              <li><a href="#intruccions">Instruccions</a></li>
+              <li><a href="#expressions">Expressions</a></li>
+              <li><a href="#classes">Classess</a></li>
+              <li><a href="#escriptura">Escriptura</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#bibliotequesPython">Biblioteques en Python</a>
+            <ul>
+              <li><a href="#bibliotecaEstandard">Biblioteca estàndard</a></li>
+              <li>
+                <a href="#gestio">Gestió de biblioteques</a>
+                <ul>
+                  <li><a href="#pip">pop</a></li>
+                  <li><a href="#conda">conda</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><a href="#entorns">Entorns de desenvolupament</a></li>
+            <li>
+                <a href="#implementacions">Implementacions</a>
+              <ul>
+                <li>
+                  <a href="#CPython">CPython</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#desenvolupament">Desenvolupament</a></li>
+            <li><a href="#nom">Nom</a></li>
+            <li><a href="#generador">Generadors de documentació de l'API</a></li>
+            <li><a href="#usos">Usos</a></li>
+            <li><a href="#referencies">Referències</a></li>
+            <li><a href="#vegeu">Vegeu també</a></li>
+            <li><a href="#bibliografia">Bibliografia</a></li>
+            <li><a href="#enllaços">Enllaços externs</a></li>
+          </ul>
+        </ul>
+      </div>
+    </span>
+    Python
+  </h1>
+  <hr>
+  <br>
+
+  <!-- INFOBOX -->
+  <div class="infobox">
+    <table>
+      <tr>
+        <th colspan="2">Python</th>
+      </tr>
+      <tr>
+        <td colspan="2" class="images">
+          <img src="Python_logo_and_wordmark.svg" alt="Python" width=50%>
+          <br>
+          <img src="CPT-TheoryOfComp-Binary-Search-Python.png" alt="Imagen">
+        </td>
+      </tr>
+      <tr>
+        <td><b>Tipus</b></td>
+        <td>
+          <a href="https://www.wikidata.org/wiki/Q899523">llenguatge de programació orientat a objectes</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3_din%C3%A0mic">llenguatge de programació dinàmic</a>, 
+          <a href="https://www.wikidata.org/wiki/Q3839507">llenguatge de programació funcional</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Llenguatge_script">llenguatge script</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Multi-paradigma">llenguatge de programació multiparadigma</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q21562092">llenguatge de programació imperatiu</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Llenguatge_interpretat">llenguatge interpretat</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3_d%27alt_nivell">llenguatge de programació d'alt nivell</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3">llenguatge de programació</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Sistema_d%27execuci%C3%B3">Sistema d'execució</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q50843083">llenguatge de regles fora de lloc</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q28923017">llenguatge de programació estricte</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Programari_de_codi_obert">programari de codi obert</a> i 
+          <a href="https://ca.wikipedia.org/wiki/Programari">programari</a>
+          </td>
+      </tr>
+      <tr>
+        <td><b>Data de creació</b></td>
+        <td>20 febrer 1991</td>
+      </tr>
+      <tr>
+        <td><b>Disseny</b></td>
+        <td><a href="https://ca.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a></td>
+      </tr>
+      <tr>
+        <td><b>Desenvolupador</b></td>
+        <td>
+          <a href="https://ca.wikipedia.org/w/index.php?title=Python_Software_Foundation&redirect=no">Python Software Foundation</a> i 
+          <a href="https://ca.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a></td>
+      </tr>
+      <tr>
+        <td><b><a href="https://ca.wikipedia.org/wiki/Ep%C3%B2nim">Epònim</a></b></td>
+        <td><a href="https://ca.wikipedia.org/wiki/Monty_Python">Monty Python</a></td>
+      </tr>
+      <tr>
+        <td><b>Paradigma de programació</b></td>
+        <td>
+          <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_funcional">programació funcional</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_orientada_a_objectes">programació orientada a objectes</a>, 
+          <a href="https://www.wikidata.org/wiki/Q98609791">dynamic programming</a><sup>(en)</sup>, 
+          <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_imperativa">llenguatge imperatiu</a> i 
+          <a href="https://www.wikidata.org/wiki/Q4306983">programació multiparadigma</a>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Darrera versió estable</b></td>
+        <td>3.15.0 alpha 2 ()<br>3.14.2 ()</td>
+      </tr>
+      <tr>
+        <td><b>Tipus de dades</b></td>
+        <td>Forta, dinàmica</td>
+      </tr>
+      <tr>
+        <td><b>Dialectes</b></td>
+        <td><a href="https://ca.wikipedia.org/wiki/Stackless_Python?action=edit&veswitched=1">Stackless Python</a>, 
+        <a href="https://ca.wikipedia.org/w/index.php?title=RPython&action=edit&redlink=1">RPython</a>, 
+        <a href="https://ca.wikipedia.org/wiki/Cython">Cython</a>
+      </td>
+      </tr>
+      <tr>
+        <td><b>Llenguatge de programació</b></td>
+        <td><b>Python</b> i <a href="https://ca.wikipedia.org/wiki/Llenguatge_C">C</a></td>
+      </tr>
+      <tr>
+        <td><b>Influenciat per</b></td>
+        <td>
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1057802">ABC</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q2166735">ALGOL 68</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1928222">Modula-3</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Llenguatge_C">C</a>, 
+          <a href="https://ca.wikipedia.org/wiki/C%2B%2B">C++</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Perl">Perl</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Java_(llenguatge_de_programaci%C3%B3)">Java</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Lisp">Lisp</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Haskell">Haskell</a>, 
+          <a href="https://ca.wikipedia.org/wiki/APL">APL</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q775159">CLU</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1268744">Dylan</a>, 
+          <a href="https://www.wikidata.org/wiki/Special:EntityPage/Q1156474">Icon</a> i 
+          <a href="https://ca.wikipedia.org/wiki/ML_Est%C3%A0ndard">ML Estàndard</a>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Ha influenciat</b></td>
+        <td>
+          <a href="https://ca.wikipedia.org/wiki/Ruby">Ruby</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Boo">Boo</a>, 
+          <a href="https://ca.wikipedia.org/wiki/Groovy">Groovy</a>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Sistema operatiu</b></td>
+        <td>
+          <a href="https://ca.wikipedia.org/wiki/Multiplataforma">multiplataforma</a>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Llicència</b></td>
+        <td>
+          <a href="https://ca.wikipedia.org/wiki/Python_Software_Foundation_License">Python Software Foundation License</a>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Etiqueta d'Stack Exchange</b></td>
+        <td>
+          <a href="https://stackoverflow.com/tags/python">Etiqueta</a>, 
+          <a href="https://quantumcomputing.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://softwareengineering.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://codereview.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://datascience.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://unix.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://dsp.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://raspberrypi.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://askubuntu.com/tags/python">Etiqueta</a>, 
+          <a href="https://gis.stackexchange.com/tags/python">Etiqueta</a>, 
+          <a href="https://ai.stackexchange.com/tags/python">Etiqueta</a> i 
+          <a href="https://or.stackexchange.com/tags/python">Etiqueta</a>
+        </td>
+      </tr>
+      <tr>
+        <td><b>Pàgina web</b></td>
+        <td><a href="https://www.python.org/">python.org</a></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- TEXTO -->
+  <p><strong>Python</strong> és un <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3_d%27alt_nivell">llenguatge 
+    de programació d'alt nivell</a> i propòsit general molt utilitzat.<a href="#ref1">[1]</a><a href="#ref3">[2]</a><a href="#ref3">[3]</a> 
+    Va ser creat per <a href="https://ca.wikipedia.org/wiki/Guido_van_Rossum">
+    Guido van Rossum</a> l'any 1991. La seva filosofia de disseny cerca llegibilitat en el codi i la seva sintaxi permet als 
+    <a href="https://ca.wikipedia.org/wiki/Programador">programadors</a> expressar <a href="https://ca.wikipedia.org/wiki/Concepte">conceptes</a> 
+    en menys línies de codi del que seria possible en llenguatges com <a href="https://ca.wikipedia.org/wiki/Llenguatge_C">C</a>. També 
+    proveeix estructures per permetre programes més entenedors tant a petita com a gran escala.
+    [...]
+  </p>
+  <br>
+  <h2 id="historia">Història</h2>
+    <figure class="mi-cuadro">
+      <img src="Guido_van_Rossum_OSCON_2006.jpg" alt="Descripción de la imagen">
+      <figcaption><a href="https://ca.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a>, 
+    el creador de Python</figcaption>    <!--Texto que aparece debajo de la foto-->
+    </figure>
+    <br>
+    <p>
+      Python fou creat a la darrería dels anys 80 per <a href="https://ca.wikipedia.org/wiki/Guido_van_Rossum">Guido van Rossum</a> al 
+      Centrum Wiskunde & Informatica (<a href="https://ca.wikipedia.org/w/index.php?title=CWI&action=edit&redlink=1">CWI</a>) als 
+      <a href="https://ca.wikipedia.org/wiki/Pa%C3%AFsos_Baixos">Països Baixos</a>, com a successor del llenguatge 
+      <a href="https://ca.wikipedia.org/w/index.php?title=Llenguatge_ABC&action=edit&redlink=1">ABC</a> (que alhora havia estat inspirat en 
+      <a href="https://ca.wikipedia.org/w/index.php?title=SETL&action=edit&redlink=1">SETL</a>), capaç de gestionar excepcions i interconnectar
+      amb el <a href="https://ca.wikipedia.org/wiki/Sistema_operatiu">sistema operatiu</a> 
+      <a href="https://ca.wikipedia.org/wiki/Amoeba_(sistema_operatiu)">Amoeba</a>. La implementació va començar el desembre de l'any 
+      <a href="https://ca.wikipedia.org/wiki/1989">1989</a>. Van Rossum va ser el principal responsable i promotor del projecte. Aquest 
+      <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3">llenguatge</a> va ser creat amb la intenció que fos fàcil 
+      d'utilitzar i d'aprendre sense comprometre rendiment i velocitat d'execució, però el
+      <i><a href="https://ca.wikipedia.org/wiki/Maquinari">maquinari</a></i> disponible als anys 80 del segle xx en va limitar l'ús, i 
+      el projecte no va tenir el succés que se n'esperava.
+      <br>
+      [...]
+    </p>
+
+  <h2 id="caracteristiques">Característiques i filosofia</h2>
+  <br>  
+  <h3 id="funcionalitats">Descripció de funcionalitats</h3>
+    <br>
+    <p>
+      disponible als anys 80 del segle xx en va limitar l'ús, i el projecte no va tenir el succés que se n'esperava.
+      <a href="https://ca.wikipedia.org/wiki/Multiparadigma">multiparadigma</a>. Això significa que, més que no pas forçar als 
+      <a href="https://ca.wikipedia.org/wiki/Desenvolupador_de_programari">programadors</a> a adoptar un 
+      <a href="https://ca.wikipedia.org/w/index.php?title=Estil_de_Programaci%C3%B3&action=edit&redlink=1">estil particular de programació</a>, 
+      aquest llenguatge permet diversos estils: dona suport alhora a la 
+      <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_orientada_a_objectes">programació orientada a objetes</a> i la 
+      <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_estructurada">programació estructurada</a>, i molts components característiques també suporten la 
+      <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_funcional">programació funcional</a> i la 
+      <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_orientada_a_aspectes">programació orientada a aspectes</a> hi-inclòs per metaprogramació 
+      i metaobjectes (mètodes màgics).[39] També són suportats molts altres 
+      <a href="https://ca.wikipedia.org/wiki/Paradigma">paradigmes</a> a través d'extensions, incloent disseny per contracte i 
+      <a href="https://ca.wikipedia.org/wiki/Programaci%C3%B3_l%C3%B2gica">programació lògica</a> [...]
+    </p>
+    <br>
+
+    <h3 id="paradigmes">Paradigmes</h3>
+    <br>  
+    <p>
+      Python fou dissenyat per ser altament extensible, més que no pas tenir totes les seves funcionalitats construïdes 
+      en el nucli. Aquesta modularitat compacta ha fet que sigui particularment popular com un mitjà d'addició d'
+      <a href="https://ca.wikipedia.org/wiki/Interf%C3%ADcie_de_programaci%C3%B3_d%27aplicacions">interfícies programables</a> a 
+      aplicacions existents. Un dels objectius del disseny del 
+      <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3">llenguatge</a> és la facilitat de l'extensió, de 
+      manera que es poden escriure nous mòduls fàcilment en altres llenguatges com ara
+      <a href="https://ca.wikipedia.org/wiki/Llenguatge_C">C</a> o <a href="https://ca.wikipedia.org/wiki/C%2B%2B">C++</a>. 
+      La visió de <a href="https://ca.wikipedia.org/wiki/Guido_van_Rossum">Van Rossum</a> d'un llenguatge amb petit nucli amb una 
+      biblioteca estàndard gran i un <a href="https://ca.wikipedia.org/wiki/Int%C3%A8rpret_(inform%C3%A0tica)">intèrpret</a> 
+      fàcilment extensible, van mantenir el projecte allunyat d'una de les seves frustracions amb 
+      <a href="https://ca.wikipedia.org/w/index.php?title=Llenguatge_ABC&action=edit&redlink=1">ABC</a>, que se centra precisament en el 
+      <a href="https://ca.wikipedia.org/wiki/Paradigma_de_programaci%C3%B3">paradigma</a> oposat.
+      <br>
+      [...]
+    </p>
+
+  <h2 id="sintaxi">Sintaxi i semàntica</h2>
+  <p>
+    El Python està dissenyat per ser un llenguatge molt visual, i, com a característica principal i distintiva, utilitza 
+    <a href="https://ca.wikipedia.org/wiki/Sagnat">sagnat</a>. Això és poc comú en 
+    <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3">llenguatges de programació</a>, ja que molts (com el 
+    <a href="https://ca.wikipedia.org/wiki/C_(llenguatge_de_programaci%C3%B3)">C</a> o <a href="https://ca.wikipedia.org/wiki/Java_(llenguatge_de_programaci%C3%B3)">Java</a>) 
+    utilitzen delimitadors com poden ser <code>{</code> i <code>}</code>. Això el fa més llegible.
+    
+  </p>
+  <br> 
+    <h3 id="sagnat">Sagnat</h3>
+    <br>
+    <p>
+        El sagnat és la característica més visible del Python. Al contrari que en altres llenguatges, 
+        és obligatori i s'utilitza per delimitar blocs. Un augment en el sagnat, si va precedit per 
+        una declaració correcta, significa l'inici d'un nou bloc; la disminució significa el final 
+        del bloc actual. S'inclou una comparació amb el Java per exemplificar-ho.
+        <br>
+        [...]
+    </p>
+    <br>
+    
+    <h3 id="instruccions">Instruccions</h3>
+    <br>
+    <p>
+      Algunes de les expressions de Python són:
+    <ul>
+      <li>La 
+        <a href="https://ca.wikipedia.org/wiki/Condicional_(programaci%C3%B3)">instrucció</a> 
+        <code>if</code>, que executa un bloc de codi si es compleix una condició. Relacionat amb l'
+        <code>if</code> existeix l'<code>elif</code>, que executa un bloc de codi si no es compleix una condició i l'
+        <code>elif</code> (contracció d'else-if en 
+        <a href="https://ca.wikipedia.org/wiki/Angl%C3%A8s">anglès</a> <em>si no-si</em> en català), que executa un 
+        bloc de codi si no es compleix una condició però si una altra.
+        <br>
+        [...]
+      </li>
+    </ul>
+    </p>
+    <br>
+
+    <h3 id="expressions">Expressions</h3>
+    <br>
+    <p>
+        Algunes de les expressions de Python són similars a altres llenguatges com Java i C, mentre que d'altres no ho són:</p>
+    <ul>
+        <li>
+          Suma, resta i multiplicació són el mateix, però la 
+          <a href="https://ca.wikipedia.org/wiki/Divisi%C3%B3">divisió</a> 
+          no. Hi ha dos tipus de divisions en Python. Divisió sencera 
+          <code>//</code> i divisió de punt flotant <code>/</code>.  A més a més, Python va afegir 
+          <code>**</code> com a operador per exponenciació. Per trobar l'
+          <a href="https://ca.wikipedia.org/wiki/Operaci%C3%B3_m%C3%B2dul">mòdul</a> d'una divisió, és a dir, 
+          el residu existeix l'operador <code>%</code>.
+          <br>
+          [...]
+        </li>
+    </ul>
+  </p>
+    <br>
+
+    <h3 id="metodes">Mètodes</h3>
+    <br>
+    <p>
+      Els mètodes a Python són les 
+      <a href="https://ca.wikipedia.org/w/index.php?title=Funcions_Python&action=edit&redlink=1">funcions</a> 
+       que es defineixen com un bloc de codi referenciat per un nom de funció, amb cosa que permetrem trucar 
+       a la funció des de fora per a la execució d'un codi intern, cada vegada que la funció sigui trucada 
+       s'executarà el codi especificat. Finalment, una vegada executat el codi es fa un return d'un o més valors. 
+       Les funcions poden rebre com a paràmetre, és a dir, dintre del parèntesi, les variables que hagin estat 
+       declarades prèviament necessàries per executar el codi especificat.
+       [...]
+    </p>
+    <br>
+    
+    <h3 id="classes">Classes</h3>
+    <br>
+    <p>
+      Python és un llenguatge d'alt nivell que inclou la programació orientada a objectes. Per dur a terme aquesta part de la programació, 
+      Python conté un mecanisme de creació de 
+      <a href="https://ca.wikipedia.org/wiki/Classe_(inform%C3%A0tica)">classe</a> 
+      amb el qual cada inicialització de la classe crea una instància nova de l'objecte 
+      dissenyat. Cada instància pot tenir atributs adjunts per mantenir l'estat de l'objecte. El mètode constructor 
+      <code>__init__()</code> permet la 
+      inicialització d'aquests atributs de l'objecte que determinen l'estat d'aquest. Aquesta inicialització pot ser pública o privada. 
+      Una vegada creat aquest mètode, cada objecte té una funcionalitat diferent i per tant, amb l'objectiu que l'objecte actuiï d'una 
+      manera o d'una altra es defineixen funcions/mètodes que contenen el codi per tal que l'objecte pugui realitzar diferents operacions. 
+      Tots els mètodes han de rebre per paràmetre la paraula clau <code>self</code> que fa referència a l'objecte. Amb aquesta paraula, 
+      indiquem que tot es modifica sobre l'objecte creat en la instància.
+      [...]
+    </p>
+    <br>
+
+    <h3 id="escriptura">Escriptura</h3>
+    <br>
+    <p>
+      Python utilitza <em>duck typing</em> aplicant aquest concepte a objectes. Les restriccions de tipus no es verifiquen en 
+      <a href="https://ca.wikipedia.org/wiki/Temps_de_compilaci%C3%B3">temps compilació</a>, sino que les operacions en un 
+      objecte poden fallar, el que significa que l'objecte donat no es de tipus adequat. Tot i que està 
+      <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3_din%C3%A0mic">escrit dinàmicament</a>, Python està 
+      <a href="https://ca.wikipedia.org/w/index.php?title=Fortament_escrit_Python&action=edit&redlink=1">fortament escrit</a>, 
+      per això prohibeix les operacions que no estàn ben definides (com per exemple agregar un número a una cadena).
+      [...]
+    </p>
+
+  <h2 id="bibliotequesPython">Biblioteques en Python</h2>
+    <h3 id="bibliotecaEstandard">Biblioteca estàndard</h3>
+    <br>
+    <p>
+      El Python té una biblioteca estàndard gran, que tot sovint se cita com una de les principals fortaleses del 
+      Python. Aporta eines ja programades que poden fer una gran varietat de funcions. S'ha dit que el Python 
+      té <i>piles incloses</i>. Els mòduls de la biblioteca estàndard es poden augmentar amb mòduls propis escrits 
+      en C o bé Python. Aquest fet, de poder combinar Python i C o C++, fa que sigui un <i>llenguatge de cola</i> molt 
+      potent entre eines i llenguatges.
+      [...]
+    </p>
+    <br>
+    <h3 id="gestio">Gestió de biblioteques</h3>
+    <br>
+    <p>
+      Tot i que la biblioteca estàndard de Python és un dels punts forts d'aquest 
+      <a href="https://ca.wikipedia.org/wiki/Llenguatge_de_programaci%C3%B3">llenguatge de programació</a>, a causa de la quantitat d'eines que proporciona per a realitzar diferents 
+      tasques, la gran comunitat de programadors de Python ha creat amb el pas del temps 
+      biblioteques per a fer tasques específiques.
+      [...]
+    </p>
+    <br>
+      <h4 id="pip">pip</h4>
+      <br>
+      <p>
+          pip és el gestor 
+          <i><a href="https://ca.wikipedia.org/wiki/De_facto">de facto</a></i> de Python, 
+          la majoria d'instal·lacions utilitzen com a predeterminat aquest gestor. A 
+          partir de les distribucions Python 2.7.9 i Python 3.4, pip és inclòs com a 
+          gestor per defecte. D'acord amb el seu creador, 
+          <a href="https://ca.wikipedia.org/w/index.php?title=Ian_Bicking&action=edit&redlink=1">Ian Bicking</a>, 
+          és un acrònim de Pip Installs Packages. Per instal·lar una biblioteca s'haurà 
+          d'introduir la següent comanda per terminal (linux):
+          [...]
+      </p>
+      <br>
+
+      <h4 id="conda">conda</h4>
+      <br>  
+      <p>
+        Conda és un gestor de paquets i d'entorns multiplataforma de codi obert 
+        per a qualsevol llenguatge de programació. Va ser desenvolupat per resoldre 
+        les dificultats que afrontaven els analistes de dades i la comunitat 
+        bioinformàtica al moment d'instal·lar biblioteques. Avui dia és utilitzat 
+        principalment per gestionar biblioteques de Python i R, i està recolzada 
+        per la companyia Anaconda Inc. La gran diferència respecte de pip és 
+        la gestió de conflictes entre dependències de diferents biblioteques, 
+        ajustant les versions d'aquestes per evitar errors. És el gestor 
+        predeterminat de les distribucions d'Anaconda i Miniconda.
+      </p>
+
+  <h2 id="entorns">Entorns de desenvolupament</h2>
+  <p>
+    La gran majoria de les implementacions de Python (incloent 
+    <a href="https://ca.wikipedia.org/wiki/CPython">CPython</a> 
+    inclouen un bucle llegeix-avalua-mostra (REPL, per les seves sigles en 
+    <a href="https://ca.wikipedia.org/wiki/Angl%C3%A8s">anglès</a>), 
+    permetent-los funcionar com un intèrpret de línies de comandes per al qual l'
+    <a href="https://ca.wikipedia.org/wiki/Usuaris,_perfil_i_grups_(inform%C3%A0tica)">usuari</a> 
+    introdueix elements seqüencialment i en rep els resultats de forma immediata.
+    [...]
+  </p>
+  <h2 id="implementacions">Implementacions</h2>
+    <br> 
+    <h3 id="CPython">CPython</h3>
+    <br>
+      <p>
+        La implementació principal del Python, coneguda com a 
+        <i><a href="https://ca.wikipedia.org/wiki/CPython" target="_blank">CPython</a></i>, 
+        està escrita en 
+        <a href="https://ca.wikipedia.org/wiki/C_(llenguatge_de_programaci%C3%B3)" target="_blank">C</a>, 
+        satisfent l'estàndard C89. 
+        El CPython compila els programes Python en un 
+        <a href="https://ca.wikipedia.org/wiki/Bytecode" target="_blank">bytecode</a> 
+        intermedi, que posteriorment s'executa per la màquina virtual.
+        Es distribueix amb una biblioteca estàndard força gran escrita en una barreja de C i Python. 
+        Té versions per moltes plataformes, incloent 
+        <a href="https://ca.wikipedia.org/wiki/Microsoft_Windows" target="_blank">Microsoft Windows</a> 
+        i la major part dels sistemes 
+        <a href="https://ca.wikipedia.org/wiki/Sistemes_Unix-like" target="_blank">Unix-like</a> 
+        moderns.
+        Des de la seva concepció va ésser dissenyat per ser multiplataforma; el seu ús i desenvolupament en plataformes esotèriques com Aomeba, juntament amb altres més convencionals com 
+        <a href="https://ca.wikipedia.org/wiki/Unix" target="_blank">Unix</a> 
+        i 
+        <a href="https://ca.wikipedia.org/wiki/MacOS" target="_blank">Mac OS</a>, 
+        ha ajudat en aquest aspecte.
+        El 
+        <a href="https://ca.wikipedia.org/wiki/2009" target="_blank">2009</a> 
+        Google va començar un projecte anomenat 
+        <a href="https://ca.wikipedia.org/wiki/Unladen_Swallow" target="_blank">Unladen Swallow</a> 
+        amb l'objectiu d'incrementar la velocitat de l'interpretador Python unes cinc vegades. [...]
+      </p>
+
+  <h2 id="desenvolupament">Desenvolupament</h3>
+    <p>
+      El desenvolupament de Python es desenvolupa en gran manera a través del procés de Proposta de millora 
+      de Python (PEP, "Python Enhancement Proposal" en anglés), el mecanisme principal per proposar novetats 
+      importants, recopilar aportacions de la comunitat sobre problemes i documentar decisions sobre disseny 
+      de Python. L'estil de codificació de Python es troba recollit a PEP 8. Els PEP excepcionals 
+      són revisats i comentats per la comunitat Python i el consell directiu. [...]
+    </p>
+
+  <h2 id="nom">Nom</h3>
+    <p>
+      El nom de Python deriva del grup de comèdia britànic 
+      <a href="https://ca.wikipedia.org/wiki/Monty_Python">Monty Python</a>, 
+      que el creador de Python, Guido van Rossum, va gaudir mentre desenvolupava 
+      el llenguatge. Les referències de Monty Python apareixen sovint en el codi 
+      i cultura de Python; per exemple, les 
+      <a href="https://ca.wikipedia.org/w/index.php?title=Variables_met%C3%A0stiques&action=edit&redlink=1">variables metàstiques</a> 
+      que s'utilitzen sovint en la literatura de Python són <em>spam</em> i <em>eggs</em> en lloc dels 
+      <a href="https://ca.wikipedia.org/wiki/Foobar">foobar</a>  
+      tradicionals. La documentació oficial de Python també conté 
+      diverses referències a les rutines de Monty Python.
+    </p>
+
+  <h2 id="generadors">Generadors de documentació de l'API</h3>
+    <p>
+      Els generadors de documentació de l'API Python inclouen:
+      <ul>
+        <li>Sphinx</li>
+        <li>Epydoc</li>
+        <li>HeaderDoc</li>
+        <li>Pydoc</li>
+      </ul>
+    </p>
+
+  <h2 id="usos">Usos</h3>
+    <p>
+      Des del 2003, Python s'ha classificat constantment 
+      entre els deu primers llenguatges de programació més populars de l'
+      <a href="https://ca.wikipedia.org/w/index.php?title=TIOBE&action=edit&redlink=1">índex de la comunitat de programació TIOBE</a> 
+      on, des del febrer del 2020, és el tercer llenguatge més popular (darrere de 
+      <a href="https://ca.wikipedia.org/wiki/Java_(llenguatge_de_programaci%C3%B3)">Java</a> i 
+      <a href="https://ca.wikipedia.org/wiki/Llenguatge_C">C</a>). Va ser seleccionat Llenguatge de programació de l'any el 2007, 
+      2010 i 2018. [...]
+    </p>
+
+  <h2 id="referencies">Referències</h3>
+    <p>
+      <ol>
+        <li id="ref1">
+          <a href="#">↑</a> TIOBE Software Index. «<a href="http://www.tiobe.com/index.php/paperinfo/tpci/Python.html" target="_blank">
+            TIOBE Software Index Python</a>», 2012. [Consulta: 14 juliol 2011].
+        </li> 
+        <li>
+          <a href="#">↑</a>«<a href="http://radar.oreilly.com/2006/08/programming-language-trends.html" target="_blank">Programming Language Trends - 
+            O'Reilly Rada</a>»,. Radar.oreilly.com, 02-08-2006. [Consulta: 14 juliol 2011].
+        </li>
+        <li>
+          <a href="#">↑</a>«<a href="http://redmonk.com/sogrady/2013/02/28/language-rankings-1-13/" target="_blank">The RedMonk Programming Language Rankings: 
+            January 2013 - tecosystems</a>». Redmonk.com, 28-02-2013. [Consulta: 17 juliol 2013].
+        </li>
+        <li>
+          [...]
+        </li>
+      </ol>
+    </p>
+
+  <h2 id="vegeu">Vegeu també</h3>
+    <p>
+      <ul>
+        <li><a href="https://ca.wikipedia.org/wiki/IDLE_(Python)">IDLE (Python)</a></li>
+        <li><a href="https://ca.wikipedia.org/wiki/Spyder_(programari)">Spyder (programari)</a></li>
+        <li><a href="https://ca.wikipedia.org/wiki/AsciiDoc">AsciiDoc</a></li>
+      </ul>
+    </p>
+
+  <h2 id="bibliografia">Bibliografia</h3>
+    <p>
+      <ul>
+        <li>
+          Downey, Allen B. <a href="http://www.greenteapress.com/thinkpython/html/index.html" target="_blank">
+            <i>Think Python: How to Think Like a Computer Scientist</i></a> (en anglès).
+        </li>
+        <li>
+          Hamilton, Naomi «<a href="http://www.computerworld.com.au/index.php/id;66665771" target="_blank"><i>
+            The A-Z of Programming Languages: Python (entrevista amb Guido Van Rossum sobre el Python)</i></a>» (en anglès). 
+            <em>Computerworld</em>, 05-08-2008 [Consulta: 31 març 2010].
+        </li>
+        <li>
+          Lutz, Mark. <i>Learning Python</i> (en anglès). 4a edició. O'Reilly Media, 2009.
+          <a href="https://ca.wikipedia.org/wiki/Especial:Fonts_bibliogr%C3%A0fiques/978-0596158064" target="_blank"><small>ISBN 978-1590593561</small></a>.
+        </li>
+        <li>
+          [...]
+        </li>
+      </ul>
+    </p>
+
+  <h2 id="enllaços">Enllaços externs</h3>
+    <p>
+      <ul>
+        <li><a href="https://pythoncheatsheet.org/" target="_blank">Cheatsheet de Python</a> (anglès)</li>
+        <li><a href="https://www.python.org/" target="_blank">La web de Python</a> (anglès)</li>
+        <li><a href="https://www.python.org/download/other/" target="_blank">Python en altres plataformes</a> (anglès)</li>
+        <li><a href="https://github.com/damonkohler/sl4a" target="_blank">Scripting Layer for Android / Python per a l'Android</a> (anglès)</li>
+        <li>
+          <a href="http://www.linuxplanet.com/linuxplanet/tutorials/7157/1" target="_blank">Introducció al Python a l'Android</a> 
+          <a href="https://web.archive.org/web/20110424200032/http://www.linuxplanet.com/linuxplanet/tutorials/7157/1" target="_blank">Arvixat</a> 2011-04-24 a 
+          <a href="https://ca.wikipedia.org/wiki/Wayback_Machine" target="_blank">Wayback Machine</a>. (anglès)
+        </li>
+      </ul>
+    </p>
+</main>
+
+</body>
+</html>
